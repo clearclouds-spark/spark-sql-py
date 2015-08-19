@@ -1,19 +1,13 @@
 import sys
-import os
 import json
-import urllib
-from datetime import *
-from pyspark import SparkContext
-from pyspark.sql import SQLContext
 from pyspark.sql.functions import udf
-from pyspark.streaming import StreamingContext
-from pyspark.streaming.kafka import KafkaUtils
-import http_util
+from http_util import *
 
 
 def get_http_host(time, rdd):
     try:
         print "========= %s =========" % str(time)
+        sqlContext = getSqlContextInstance(rdd.context)
         df = json_rdd_to_sql_df(rdd)
         total_groups = df.select("dst_group_id").distinct().dropna().collect()
         # Register this DataFrame as a table.
@@ -41,5 +35,5 @@ def get_http_host(time, rdd):
 
 if __name__ == "__main__":
     brokers, topic = sys.argv[1:]
-    kafka_spark_streaming_sql_main(app_name="HttpHost", brokers, topic, 5, get_http_host)
+    kafka_spark_streaming_sql_main("HttpHost", brokers, topic, 5, get_http_host)
     

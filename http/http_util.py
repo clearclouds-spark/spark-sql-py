@@ -1,3 +1,13 @@
+#!/usr/bin/python
+import os
+import json
+import urllib
+from datetime import *
+from pyspark import SparkContext
+from pyspark.sql import SQLContext
+from pyspark.streaming import StreamingContext
+from pyspark.streaming.kafka import KafkaUtils
+
 def extract_host(url):
     if url is None:
         pass
@@ -36,7 +46,7 @@ def mkdir_p(path):
         
         
 def kafka_spark_streaming_sql_main(app_name, brokers, topic, interval_seconds, sql_function):
-    sc = SparkContext(app_name)
+    sc = SparkContext(appName=app_name)
     sqlContext = SQLContext(sc)
     ssc = StreamingContext(sc, interval_seconds)
     kvs = KafkaUtils.createDirectStream(ssc, [topic], {"metadata.broker.list": brokers})
@@ -51,3 +61,7 @@ def json_rdd_to_sql_df(rdd):
      df = sqlContext.jsonRDD(lines)
      df.printSchema()
      return df
+
+
+if __name__ == '__main__':
+    pass
