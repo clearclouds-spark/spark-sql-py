@@ -23,7 +23,7 @@ def get_http(time, rdd):
             topN_sql = "select url, total_bytes, in_bytes, out_bytes, latency, requests from urls where dst_group_id = %s" % (group_id.dst_group_id)
             topN_collect = sqlContext.sql(topN_sql).toJSON().collect()
             output[group_id.dst_group_id] = list(json.loads(x) for x in topN_collect)
-        dump_file("http", output, "http_filter_url")
+        dump_file("http", output, "http")
     except Exception as e:
         print e     
     

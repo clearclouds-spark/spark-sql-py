@@ -23,7 +23,7 @@ def get_http_filter_host(time, rdd):
         for opt in ['total_bytes', 'in_bytes', 'out_bytes', 'latency', 'requests']:
             output[opt] = list(json.loads(x) for x in hosts_info.sort(hosts_info[opt].desc()).limit(50).toJSON().collect())
      
-        dump_file("http", output, "http_filter_url")
+        dump_file("http", output, "http_filter_host")
     except Exception as e:
         print e     
     

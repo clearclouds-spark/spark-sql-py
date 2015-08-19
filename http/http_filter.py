@@ -27,7 +27,7 @@ def get_http_filter(time, rdd):
                 output['static_request'] = temp
             else:
                 output['dynamic_request'] = temp
-        dump_file("http", output, "http_filter_url")
+        dump_file("http", output, "http_filter")
     except Exception as e:
         print e     
     

@@ -21,7 +21,7 @@ def get_http_filter_server(time, rdd):
         for opt in ['total_bytes', 'in_bytes', 'out_bytes', 'latency', 'requests']:
             output[opt] = list(json.loads(x) for x in dst_ipv4_info.sort(dst_ipv4_info[opt].desc()).limit(50).toJSON().collect())
      
-        dump_file("http", output, "http_filter_url")
+        dump_file("http", output, "http_filter_server")
     except Exception as e:
         print e     
     

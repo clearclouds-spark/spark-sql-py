@@ -14,7 +14,7 @@ def get_http_filter_status(time, rdd):
         for s in status_info:
             d_s = json.loads(s)
             output[d_s['status_code']] = d_s['count']
-        dump_file("http", output, "http_filter_url")
+        dump_file("http", output, "http_filter_status")
     except Exception as e:
         print e     
     
