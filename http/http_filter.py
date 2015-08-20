@@ -1,6 +1,6 @@
 import sys
 import json
-from pyspark.sql.functions import udf
+from pyspark.sql.functions import udf, when
 from http_util import *
 
 

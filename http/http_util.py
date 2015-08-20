@@ -27,10 +27,11 @@ def getSqlContextInstance(sparkContext):
     
     
 def dump_file(topic, output, info_type):
-    path = topic + '/' + datetime.now().strftime("%Y/%m/%d/%H/")
+    base_path = "/home/juyun/datafile/json-file/live/peer1/"
+    path = base_path + datetime.now().strftime("%Y/%m/%d/%H/")
     if not os.path.exists(path):
         mkdir_p(path)
-    name = topic + '.' + datetime.now().strftime("%Y%m%d%H%M%S")
+    name = "nfcapd." + str(int(datetime.now().strftime("%Y%m%d%H%M%S"))/10 * 10) + "." + info_type + "_10s"
     print path+name
     with open(path+name, "w+") as f:
         json.dump(output, f, indent=4)
@@ -48,7 +49,8 @@ def mkdir_p(path):
 def kafka_spark_streaming_sql_main(app_name, brokers, topic, interval_seconds, sql_function):
     sc = SparkContext(appName=app_name)
     sqlContext = SQLContext(sc)
-    ssc = StreamingContext(sc, interval_seconds)
+    #ssc = StreamingContext(sc, interval_seconds)
+    ssc = StreamingContext(sc, 10)
     kvs = KafkaUtils.createDirectStream(ssc, [topic], {"metadata.broker.list": brokers})
     kvs.foreachRDD(sql_function)
     ssc.start()

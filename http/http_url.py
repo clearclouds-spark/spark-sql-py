@@ -12,17 +12,17 @@ def get_http_url(time, rdd):
         # Register this DataFrame as a table.
         df.registerAsTable("http")
         urls = sqlContext.sql("""SELECT dst_group_id, url, 
-            sum(in_bytes + out_bytes) as total_bytes, 
-            sum(in_bytes) as in_bytes, 
-            sum(out_bytes) as out_bytes, 
+            sum(in_bytes + out_bytes) as bytes_total, 
+            sum(in_bytes) as bytes_in, 
+            sum(out_bytes) as bytes_out, 
             sum(latency_sec * 1000000 + latency_usec) as latency, 
             count(*) as requests FROM http where url is not null group by dst_group_id, url""")
         urls.registerAsTable("urls")
         output = {}
-        for opt in ['total_bytes', 'in_bytes', 'out_bytes', 'latency', 'requests']:
+        for opt in ['bytes_total', 'bytes_in', 'bytes_out', 'latency', 'requests']:
             output[opt] = {}
             for group_id in total_groups:
-                topN_sql = "select url, total_bytes, in_bytes, out_bytes, latency, requests from urls where dst_group_id = %s order by %s desc limit 50" % (group_id.dst_group_id, opt)
+                topN_sql = "select url, bytes_total, bytes_in, bytes_out, latency, requests from urls where dst_group_id = %s order by %s desc limit 50" % (group_id.dst_group_id, opt)
                 topN_collect = sqlContext.sql(topN_sql).toJSON().collect()
                 output[opt][group_id.dst_group_id] = list(json.loads(x) for x in topN_collect) 
         dump_file("http", output, "http_url")
