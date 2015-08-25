@@ -7,16 +7,6 @@ from pyspark import SparkContext
 from pyspark.sql import SQLContext
 from pyspark.streaming import StreamingContext
 from pyspark.streaming.kafka import KafkaUtils
-
-def extract_host(url):
-    if url is None:
-        pass
-    proto, rest = urllib.splittype('http://'+url)
-    host, rest = urllib.splithost(rest)
-    host, port = urllib.splitport(host)
-    if port is None:
-        port = 80
-    return host
 	
 
 # Lazily instantiated global instance of SQLContext

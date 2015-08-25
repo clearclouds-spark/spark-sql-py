@@ -4,6 +4,17 @@ from pyspark.sql.functions import udf
 from http_util import *
 
 
+def extract_host(url):
+    if url is None:
+        pass
+    proto, rest = urllib.splittype('http://'+url)
+    host, rest = urllib.splithost(rest)
+    host, port = urllib.splitport(host)
+    if port is None:
+        port = 80
+    return host
+
+
 def get_http_host(time, rdd):
     try:
         print "========= %s =========" % str(time)
